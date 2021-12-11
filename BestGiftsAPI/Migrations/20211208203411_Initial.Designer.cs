@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BestGiftsAPI.Migrations
 {
-    [DbContext(typeof(BestGiftsContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20211208203411_Initial")]
     partial class Initial
     {
