@@ -35,6 +35,14 @@ namespace BestGiftsAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BestGiftsAPI", Version = "v1" });
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
             Configuration.GetConnectionString("DefaultConnection"),
@@ -60,6 +68,8 @@ namespace BestGiftsAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
