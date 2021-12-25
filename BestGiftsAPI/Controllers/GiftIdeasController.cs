@@ -24,7 +24,16 @@ namespace BestGiftsAPI.Controllers
             _logger = logger;
         }
 
+        // GET: api/GiftIdeas/Online
+        [Route("Online")]
+        [HttpGet]
+        public ActionResult Online()
+        {
+            return Ok();
+        }
+
         // GET: api/GiftIdeas/GetAll
+        [Route("GetAll")]
         [HttpGet]
         public async Task<ActionResult<List<GiftIdea>>> GetAll()
         {
@@ -34,7 +43,7 @@ namespace BestGiftsAPI.Controllers
                 output = await _context.GiftIdeas
                     .Include(comments => comments.Comments)
                     .Include(cat => cat.GiftIdeaCategory)
-                    .ThenInclude(x =>x.Category)
+                    .ThenInclude(x => x.Category)
                     .ToListAsync();
                 if (output == null)
                 {
