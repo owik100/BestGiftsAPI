@@ -41,7 +41,6 @@ namespace BestGiftsAPI.Controllers
             try
             {
                 output = await _context.GiftIdeas
-                    .Include(comments => comments.Comments)
                     .Include(cat => cat.GiftIdeaCategory)
                     .ThenInclude(x => x.Category)
                     .ToListAsync();
@@ -59,7 +58,9 @@ namespace BestGiftsAPI.Controllers
         }
 
         // GET: api/GiftIdeas/Get/1244
-        [HttpGet("{id}")]
+        [Consumes("application/json")]
+        [Route("Get/{id}")]
+        [HttpGet]
         public async Task<ActionResult<GiftIdea>> Get(int id)
         {
             var output = new GiftIdea();
