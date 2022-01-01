@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BestGiftsAPI.DAL;
 using BestGiftsAPI.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace BestGiftsAPI.Controllers
 {
@@ -80,10 +82,48 @@ namespace BestGiftsAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[All]");
+                _logger.LogError(ex, "[Get]");
             }
 
             return output;
+        }
+
+        // POST: api/GiftIdeas/PostGift
+        [Route("PostGift")]
+        [HttpPost]
+        public async Task<ActionResult> PostGift(IFormFile files)
+        {
+            if (files != null)
+            {
+                if (files.Length > 0)
+                {
+                    //Getting FileName
+                    var fileName = Path.GetFileName(files.FileName);
+                    //Getting file Extension
+                    var fileExtension = Path.GetExtension(fileName);
+                    // concatenating  FileName + FileExtension
+                    var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
+
+                    byte[] imageArr;
+                    using (var target = new MemoryStream())
+                    {
+                        files.CopyTo(target);
+                        imageArr = target.ToArray();
+                    }
+
+                    var giftIdeaToUpload = new GiftIdea()
+                    {
+                        ImageContent = imageArr,
+                    };
+
+
+
+                    _context.GiftIdeas.Add(giftIdeaToUpload);
+                  await _context.SaveChangesAsync();
+
+                }
+            }
+            return Ok();
         }
     }
 }

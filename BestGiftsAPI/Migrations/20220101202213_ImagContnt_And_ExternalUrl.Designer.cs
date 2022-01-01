@@ -4,14 +4,16 @@ using BestGiftsAPI.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BestGiftsAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class BestGiftsContextModelSnapshot : ModelSnapshot
+    [Migration("20220101202213_ImagContnt_And_ExternalUrl")]
+    partial class ImagContnt_And_ExternalUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
