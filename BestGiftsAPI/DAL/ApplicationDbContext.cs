@@ -1,4 +1,4 @@
-﻿using BestGiftsAPI.Models;
+﻿using BestGiftsAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

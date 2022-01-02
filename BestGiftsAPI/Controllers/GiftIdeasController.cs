@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BestGiftsAPI.DAL;
-using BestGiftsAPI.Models;
+using BestGiftsAPI.Models_DTO;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using AutoMapper;
+using BestGiftsAPI.Entities;
 
 namespace BestGiftsAPI.Controllers
 {
@@ -19,11 +21,13 @@ namespace BestGiftsAPI.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public GiftIdeasController(ApplicationDbContext context, ILogger<GiftIdeasController> logger)
+        public GiftIdeasController(ApplicationDbContext context, ILogger<GiftIdeasController> logger, IMapper mapper)
         {
             _context = context;
             _logger = logger;
+            _mapper = mapper;
         }
 
         // GET: api/GiftIdeas/Online
@@ -37,15 +41,24 @@ namespace BestGiftsAPI.Controllers
         // GET: api/GiftIdeas/GetAll
         [Route("GetAll")]
         [HttpGet]
-        public async Task<ActionResult<List<GiftIdea>>> GetAll()
+        public async Task<ActionResult<List<GiftIdeaDTO>>> GetAll()
         {
-            var output = new List<GiftIdea>();
+            var output = new List<GiftIdeaDTO>();
+            var entities = new List<GiftIdea>();
             try
             {
-                output = await _context.GiftIdeas
+                entities = await _context.GiftIdeas
                     .Include(cat => cat.GiftIdeaCategory)
                     .ThenInclude(x => x.Category)
                     .ToListAsync();
+
+                foreach (var item in entities)
+                {
+                    output.Add(_mapper.Map<GiftIdeaDTO>(item));
+                }
+
+                
+
                 if (output == null)
                 {
                     return NotFound();
@@ -63,17 +76,19 @@ namespace BestGiftsAPI.Controllers
         [Consumes("application/json")]
         [Route("Get/{id}")]
         [HttpGet]
-        public async Task<ActionResult<GiftIdea>> Get(int id)
+        public async Task<ActionResult<GiftIdeaDTO>> Get(int id)
         {
-            var output = new GiftIdea();
+            var output = new GiftIdeaDTO();
+            var entitie = new GiftIdea();
             try
             {
-                output = await _context.GiftIdeas
+                entitie = await _context.GiftIdeas
                     .Include(comments => comments.Comments)
                     .Include(cat => cat.GiftIdeaCategory)
                     .ThenInclude(x => x.Category)
                     .FirstOrDefaultAsync(x => x.GiftIdeaId == id);
 
+                output = _mapper.Map<GiftIdeaDTO>(entitie);
 
                 if (output == null)
                 {
