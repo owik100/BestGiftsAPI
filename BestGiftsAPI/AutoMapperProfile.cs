@@ -17,10 +17,16 @@ namespace BestGiftsAPI
                 .ForMember(dest => dest.GiftIdeaCategoryDTO, opt => opt.MapFrom(src => src.GiftIdeaCategory))
                 .ForMember(dest => dest.ImageContentB64, opt => opt.MapFrom(src=> src.ImageContent != null ? Convert.ToBase64String(src.ImageContent) : null));
 
-            CreateMap<Category, CategoryDTO>();
-            CreateMap<Comment, CommentDTO>();
-            CreateMap<GiftIdeaCategory, GiftIdeaCategoryDTO>();
-             
+            CreateMap<Category, CategoryDTO>()
+                 .ForMember(dest => dest.GiftIdeaCategoryDTO, opt => opt.MapFrom(src => src.GiftIdeaCategory));
+
+            CreateMap<Comment, CommentDTO>()
+                .ForMember(dest => dest.GiftIdeaDTO, opt => opt.MapFrom(src => src.GiftIdea));
+
+            CreateMap<GiftIdeaCategory, GiftIdeaCategoryDTO>()
+                .ForMember(dest => dest.GiftIdeaDTO, opt => opt.MapFrom(src => src.GiftIdea))
+                .ForMember(dest => dest.CategoryDTO, opt => opt.MapFrom(src => src.Category));
+
         }
     }
 }
