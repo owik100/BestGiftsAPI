@@ -4,14 +4,16 @@ using BestGiftsAPI.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BestGiftsAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class BestGiftsContextModelSnapshot : ModelSnapshot
+    [Migration("20220108165011_Add_Creatiom_Time")]
+    partial class Add_Creatiom_Time
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -10,6 +10,7 @@ namespace BestGiftsAPI.Models_DTO
         public int CommentId { get; set; }
         public string CommentContent { get; set; }
         public string CommentAuthor { get; set; }
+        public DateTime CreationTime { get; set; }
 
         public int GiftIdeaId { get; set; }
         public GiftIdeaDTO GiftIdeaDTO { get; set; }

@@ -14,6 +14,7 @@ namespace BestGiftsAPI.Models_DTO
         public int LikesCounter { get; set; }
         public string ImageContentB64 { get; set; }
         public string ExternalUrl { get; set; }
+        public DateTime CreationTime { get; set; }
 
         public ICollection<CommentDTO> CommentsDTO { get; set; }
         public ICollection<GiftIdeaCategoryDTO> GiftIdeaCategoryDTO { get; set; }

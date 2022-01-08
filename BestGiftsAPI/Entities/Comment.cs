@@ -10,6 +10,7 @@ namespace BestGiftsAPI.Entities
         public int CommentId { get; init; }
         public string CommentContent { get; init; }
         public string CommentAuthor{ get; init; }
+        public DateTime CreationTime { get; init; }
 
         public int GiftIdeaId { get; init; }
         public GiftIdea GiftIdea { get; init; }

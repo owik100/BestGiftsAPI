@@ -14,6 +14,7 @@ namespace BestGiftsAPI.Entities
         public int LikesCounter { get; init; }
         public byte[] ImageContent { get; init; }
         public string ExternalUrl { get; init; }
+        public DateTime CreationTime { get; init; }
 
         public ICollection<Comment> Comments { get; init; }
         public ICollection<GiftIdeaCategory> GiftIdeaCategory { get; init; }
