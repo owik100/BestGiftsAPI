@@ -30,14 +30,6 @@ namespace BestGiftsAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/GiftIdeas/Online
-        [Route("Online")]
-        [HttpGet]
-        public ActionResult Online()
-        {
-            return Ok();
-        }
-
         // GET: api/GiftIdeas/GetAll
         [Route("GetAll")]
         [HttpGet]

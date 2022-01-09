@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BestGiftsAPI</name>
+    </assembly>
+    <members>
+        <member name="M:BestGiftsAPI.Controllers.RankingController.ChangeGiftIdeaRanking(System.Int32,System.Boolean)">
+            <summary>
+            Zwiększa lub zmniejsza ranking pomysłu na prezent o 1 głos
+            </summary>
+            <param name="id">id pomysłu na prezent</param>
+            <param name="increase">Określa czy zwiększyć czy zmniejszyć punkty w rankingu</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
