@@ -48,8 +48,7 @@ namespace BestGiftsAPI.Controllers
             try
             {
                 entities = await _context.GiftIdeas
-                    .Include(cat => cat.GiftIdeaCategory)
-                    .ThenInclude(x => x.Category)
+                    .OrderByDescending(x => x.GiftIdeaId)
                     .ToListAsync();
 
                 foreach (var item in entities)
@@ -58,7 +57,6 @@ namespace BestGiftsAPI.Controllers
                 }
 
                 
-
                 if (output == null)
                 {
                     return NotFound();
