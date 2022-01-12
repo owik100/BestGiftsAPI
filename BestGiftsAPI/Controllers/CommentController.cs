@@ -28,11 +28,13 @@ namespace BestGiftsAPI.Controllers
         }
 
         // POST: api/Comment/Create
+        [Route("Create")]
         [HttpPost]
         public async Task<ActionResult> Create(CommentDTO commentDTO)
         {
             try
             {
+                commentDTO.CreationTime = DateTime.Now;
                 Comment comment = _mapper.Map<Comment>(commentDTO);
                 _context.Comments.Add(comment);
                 await _context.SaveChangesAsync();
