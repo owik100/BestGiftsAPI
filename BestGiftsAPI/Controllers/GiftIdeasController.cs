@@ -56,7 +56,7 @@ namespace BestGiftsAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[All]");
+                _logger.LogError(ex, "[GetAll]");
             }
 
             return output;

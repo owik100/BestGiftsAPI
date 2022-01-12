@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BestGiftsAPI.Controllers
@@ -71,7 +73,13 @@ namespace BestGiftsAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[Get]");
+                _logger.LogError(ex, "[ChangeGiftIdeaRanking]");
+                var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(ex.Message)
+                };
+                throw new System.Web.Http.HttpResponseException(resp);
+
             }
 
             return Ok();

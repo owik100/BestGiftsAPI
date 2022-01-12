@@ -33,6 +33,9 @@ namespace BestGiftsAPI
               .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.CommentsDTO))
               .ForMember(dest => dest.GiftIdeaCategory, opt => opt.MapFrom(src => src.GiftIdeaCategoryDTO))
               .ForMember(dest => dest.ImageContent, opt => opt.MapFrom(src => src.ImageContentB64 != null ? Convert.FromBase64String(src.ImageContentB64) : null));
+
+            CreateMap<CommentDTO, Comment>()
+               .ForMember(dest => dest.GiftIdea, opt => opt.MapFrom(src => src.GiftIdeaDTO));
         }
     }
 }
