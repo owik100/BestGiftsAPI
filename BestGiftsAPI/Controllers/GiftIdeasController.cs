@@ -73,7 +73,7 @@ namespace BestGiftsAPI.Controllers
             try
             {
                 entitie = await _context.GiftIdeas
-                    .Include(comments => comments.Comments)
+                    .Include(comments => comments.Comments.OrderByDescending(x => x.CreationTime))
                     .Include(cat => cat.GiftIdeaCategory)
                     .ThenInclude(x => x.Category)
                     .FirstOrDefaultAsync(x => x.GiftIdeaId == id);

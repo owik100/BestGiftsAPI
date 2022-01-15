@@ -4,6 +4,7 @@ using BestGiftsAPI.Entities;
 using BestGiftsAPI.Models_DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,39 @@ namespace BestGiftsAPI.Controllers
             _context = context;
             _logger = logger;
             _mapper = mapper;
+        }
+
+        // GET: api/GiftIdeas/Get/1222
+        [Route("Get/{id}")]
+        [HttpGet]
+        public async Task<ActionResult<List<CommentDTO>>> Get(int id)
+        {
+            var output = new List<CommentDTO>();
+            var entities = new List<Comment>();
+            try
+            {
+                entities = await _context.Comments
+                    .Where(x =>x.GiftIdeaId == id)
+                    .OrderByDescending(x => x.CreationTime)
+                    .ToListAsync();
+
+                foreach (var item in entities)
+                {
+                    output.Add(_mapper.Map<CommentDTO>(item));
+                }
+
+
+                if (output == null)
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[Get]");
+            }
+
+            return output;
         }
 
         // POST: api/Comment/Create
