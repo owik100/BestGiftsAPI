@@ -72,8 +72,10 @@ namespace BestGiftsAPI.Controllers
             var entitie = new GiftIdea();
             try
             {
+                const int pageSizeComments = 10;
+
                 entitie = await _context.GiftIdeas
-                    .Include(comments => comments.Comments.OrderByDescending(x => x.CreationTime))
+                    .Include(comments => comments.Comments.OrderByDescending(x => x.CreationTime).Take(pageSizeComments))
                     .Include(cat => cat.GiftIdeaCategory)
                     .ThenInclude(x => x.Category)
                     .FirstOrDefaultAsync(x => x.GiftIdeaId == id);

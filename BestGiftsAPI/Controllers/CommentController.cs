@@ -28,18 +28,32 @@ namespace BestGiftsAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/GiftIdeas/Get/1222
+        // GET: api/GiftIdeas/Get/1222?pageNumber=2
         [Route("Get/{id}")]
         [HttpGet]
-        public async Task<ActionResult<List<CommentDTO>>> Get(int id)
+        public async Task<ActionResult<List<CommentDTO>>> Get(int id, [FromQuery] int pageNumber = 1)
         {
             var output = new List<CommentDTO>();
             var entities = new List<Comment>();
             try
             {
+                const int pageSize = 10;
+                if (pageNumber <= 0)
+                    pageNumber = 1;
+
+                int skip = (pageNumber - 1) * pageSize;
+                int take = pageSize;
+                int count = _context.Comments
+                    .Where(x => x.GiftIdeaId == id)
+                    .Count();
+
+                int totalPages = CalculateTotalPages(count, pageSize);
+
                 entities = await _context.Comments
                     .Where(x =>x.GiftIdeaId == id)
                     .OrderByDescending(x => x.CreationTime)
+                    .Skip(skip)
+                    .Take(take)
                     .ToListAsync();
 
                 foreach (var item in entities)
@@ -80,6 +94,11 @@ namespace BestGiftsAPI.Controllers
             }
 
             return Ok();
+        }
+
+        private int CalculateTotalPages(int count, int pageSze)
+        {
+            return (int)Math.Ceiling(decimal.Divide(count, pageSze));
         }
     }
 }
