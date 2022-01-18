@@ -16,7 +16,7 @@ namespace BestGiftsAPI.Models_DTO
         public string ExternalUrl { get; set; }
         public DateTime CreationTime { get; set; }
 
-        public ICollection<CommentDTO> CommentsDTO { get; set; }
+        public PagedListDTO<CommentDTO> CommentsDTO { get; set; }
         public ICollection<GiftIdeaCategoryDTO> GiftIdeaCategoryDTO { get; set; }
     }
 }

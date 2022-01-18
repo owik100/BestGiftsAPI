@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using BestGiftsAPI.Helpers;
 
 namespace BestGiftsAPI
 {
@@ -52,6 +53,8 @@ namespace BestGiftsAPI
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
+
+            services.AddSingleton<IPaginationHelper,PaginationHelper>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(

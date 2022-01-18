@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BestGiftsAPI.DAL;
 using BestGiftsAPI.Entities;
+using BestGiftsAPI.Helpers;
 using BestGiftsAPI.Models_DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,24 +21,26 @@ namespace BestGiftsAPI.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly IPaginationHelper _paginationHelper;
 
-        public CommentController(ApplicationDbContext context, ILogger<GiftIdeasController> logger, IMapper mapper)
+        public CommentController(ApplicationDbContext context, ILogger<GiftIdeasController> logger, IMapper mapper, IPaginationHelper paginationHelper)
         {
             _context = context;
             _logger = logger;
             _mapper = mapper;
+            _paginationHelper = paginationHelper;
         }
 
         // GET: api/GiftIdeas/Get/1222?pageNumber=2
         [Route("Get/{id}")]
         [HttpGet]
-        public async Task<ActionResult<List<CommentDTO>>> Get(int id, [FromQuery] int pageNumber = 1)
+        public async Task<ActionResult<PagedListDTO<CommentDTO>>> Get(int id, [FromQuery] int pageNumber = 1)
         {
-            var output = new List<CommentDTO>();
+            var output = new PagedListDTO<CommentDTO>();
             var entities = new List<Comment>();
             try
             {
-                const int pageSize = 10;
+                const int pageSize = 5;
                 if (pageNumber <= 0)
                     pageNumber = 1;
 
@@ -47,7 +50,7 @@ namespace BestGiftsAPI.Controllers
                     .Where(x => x.GiftIdeaId == id)
                     .Count();
 
-                int totalPages = CalculateTotalPages(count, pageSize);
+                int totalPages = _paginationHelper.CalculateTotalPages(count, pageSize);
 
                 entities = await _context.Comments
                     .Where(x =>x.GiftIdeaId == id)
@@ -58,7 +61,7 @@ namespace BestGiftsAPI.Controllers
 
                 foreach (var item in entities)
                 {
-                    output.Add(_mapper.Map<CommentDTO>(item));
+                    output.Items.Add(_mapper.Map<CommentDTO>(item));
                 }
 
 
@@ -66,6 +69,10 @@ namespace BestGiftsAPI.Controllers
                 {
                     return NotFound();
                 }
+
+                output.CurrentPage = pageNumber;
+                output.TotalItems = count;
+                output.PageSize = pageSize; 
             }
             catch (Exception ex)
             {
@@ -94,11 +101,6 @@ namespace BestGiftsAPI.Controllers
             }
 
             return Ok();
-        }
-
-        private int CalculateTotalPages(int count, int pageSze)
-        {
-            return (int)Math.Ceiling(decimal.Divide(count, pageSze));
         }
     }
 }

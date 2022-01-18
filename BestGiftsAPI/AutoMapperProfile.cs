@@ -13,7 +13,7 @@ namespace BestGiftsAPI
         public AutoMapperProfile()
         {
             CreateMap<GiftIdea, GiftIdeaDTO>()
-                .ForMember(dest => dest.CommentsDTO, opt => opt.MapFrom(src => src.Comments))
+                .ForPath(dest => dest.CommentsDTO.Items, opt => opt.MapFrom(src => src.Comments))
                 .ForMember(dest => dest.GiftIdeaCategoryDTO, opt => opt.MapFrom(src => src.GiftIdeaCategory))
                 .ForMember(dest => dest.ImageContentB64, opt => opt.MapFrom(src=> src.ImageContent != null ? Convert.ToBase64String(src.ImageContent) : null));
 
@@ -30,7 +30,7 @@ namespace BestGiftsAPI
 
 
             CreateMap<GiftIdeaDTO, GiftIdea>()
-              .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.CommentsDTO))
+              .ForPath(dest => dest.Comments, opt => opt.MapFrom(src => src.CommentsDTO.Items))
               .ForMember(dest => dest.GiftIdeaCategory, opt => opt.MapFrom(src => src.GiftIdeaCategoryDTO))
               .ForMember(dest => dest.ImageContent, opt => opt.MapFrom(src => src.ImageContentB64 != null ? Convert.FromBase64String(src.ImageContentB64) : null));
 
