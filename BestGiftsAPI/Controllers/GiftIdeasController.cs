@@ -54,6 +54,8 @@ namespace BestGiftsAPI.Controllers
 
                 entities = await _context.GiftIdeas
                     .OrderByDescending(x => x.GiftIdeaId)
+                    .Skip(skip)
+                    .Take(take)
                     .ToListAsync();
 
                 foreach (var item in entities)
