@@ -63,11 +63,11 @@ namespace BestGiftsAPI.Controllers
                     output.Items.Add(_mapper.Map<GiftIdeaDTO>(item));
                 }
 
-
                 if (output == null)
                 {
                     return NotFound();
                 }
+
 
                 output.CurrentPage = pageNumber;
                 output.TotalItems = count;
@@ -106,6 +106,9 @@ namespace BestGiftsAPI.Controllers
                 {
                     return NotFound();
                 }
+
+                output.CategoriesDTO = new List<CategoryDTO>();
+                _mapper.Map(entitie.GiftIdeaCategory, output.CategoriesDTO);
 
                 output.CommentsDTO.PageSize = pageSizeComments;
                 output.CommentsDTO.CurrentPage = 1;
