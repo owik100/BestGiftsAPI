@@ -128,15 +128,54 @@ namespace BestGiftsAPI.Controllers
         public async Task<ActionResult> PostGift(GiftIdeaDTO giftIdeaDTO)
         {
             GiftIdea giftIdea = new GiftIdea();
+            using var transaction = _context.Database.BeginTransaction();
 
             try
             {
                 giftIdeaDTO.CreationTime = DateTime.Now;
+
                 var giftIdeaEntity = _mapper.Map<GiftIdea>(giftIdeaDTO);
 
                 var contextAddRes = await _context.GiftIdeas.AddAsync(giftIdeaEntity);
                 giftIdea = contextAddRes.Entity;
+
                 await _context.SaveChangesAsync();
+
+                List<Category> catToAdd = new List<Category>();
+
+                List<CategoryDTO> categoriesNoDuplicates = giftIdeaDTO.CategoriesDTO.GroupBy(x => x.Name).Select(x => x.First()).ToList();
+                giftIdeaDTO.CategoriesDTO = categoriesNoDuplicates;
+
+                foreach (CategoryDTO item in giftIdeaDTO.CategoriesDTO)
+                {
+                    if (item.CategoryId <= -1)
+                    {
+                        Category newCategory = new Category()
+                        {
+                            Name = item.Name
+                        };
+                        await _context.Categories.AddAsync(newCategory);
+                        await _context.SaveChangesAsync();
+                        catToAdd.Add(newCategory);
+                    }
+                    else
+                    {
+                        catToAdd.Add(_mapper.Map<Category>(item));
+                    }
+                }
+
+                foreach (var item in catToAdd)
+                {
+                    GiftIdeaCategory giftIdeaCategoryToAdd = new GiftIdeaCategory()
+                    {
+                        GiftIdeaId = giftIdea.GiftIdeaId,
+                        CategoryId = item.CategoryId
+                    };
+                    await _context.GiftIdeaCategories.AddAsync(giftIdeaCategoryToAdd);
+                    await _context.SaveChangesAsync();
+                }
+
+                transaction.Commit();
             }
             catch (Exception ex)
             {

@@ -37,6 +37,9 @@ namespace BestGiftsAPI
             CreateMap<CommentDTO, Comment>()
                .ForMember(dest => dest.GiftIdea, opt => opt.MapFrom(src => src.GiftIdeaDTO));
 
+            CreateMap<CategoryDTO, Category>()
+                 .ForMember(dest => dest.GiftIdeaCategory, opt => opt.MapFrom(src => src.GiftIdeaCategoryDTO));
+
 
         }
     }
