@@ -13,6 +13,8 @@ using System.IO;
 using AutoMapper;
 using BestGiftsAPI.Entities;
 using BestGiftsAPI.Helpers;
+using BestGiftsAPI.Other_Models;
+using System.Linq.Expressions;
 
 namespace BestGiftsAPI.Controllers
 {
@@ -24,19 +26,23 @@ namespace BestGiftsAPI.Controllers
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly IPaginationHelper _paginationHelper;
+        private readonly IFilterSortingHelper _filterSortingHelper;
 
-        public GiftIdeasController(ApplicationDbContext context, ILogger<GiftIdeasController> logger, IMapper mapper, IPaginationHelper paginationHelper)
+        public GiftIdeasController(ApplicationDbContext context, ILogger<GiftIdeasController> logger, IMapper mapper, IPaginationHelper paginationHelper, IFilterSortingHelper filterSortingHelper)
         {
             _context = context;
             _logger = logger;
             _mapper = mapper;
             _paginationHelper = paginationHelper;
+            _filterSortingHelper = filterSortingHelper;
         }
+
+        
 
         // GET: api/GiftIdeas/GetAll
         [Route("GetAll")]
         [HttpGet]
-        public async Task<ActionResult<PagedListDTO<GiftIdeaDTO>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<PagedListDTO<GiftIdeaDTO>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] SortingModel sort = 0)
         {
             var output = new PagedListDTO<GiftIdeaDTO>();
             var entities = new List<GiftIdea>();
@@ -52,8 +58,12 @@ namespace BestGiftsAPI.Controllers
 
                 int totalPages = _paginationHelper.CalculateTotalPages(count, pageSize);
 
+                bool descending = false;
+                IOrderedQueryable orderedQueryable = null;
+                Expression<Func<GiftIdea, int>> sortingDelegat = _filterSortingHelper.PrepareSorting(sort, ref descending);
+               
                 entities = await _context.GiftIdeas
-                    .OrderByDescending(x => x.GiftIdeaId)
+                    .OrderByWithDirection(sortingDelegat, descending)
                     .Skip(skip)
                     .Take(take)
                     .ToListAsync();

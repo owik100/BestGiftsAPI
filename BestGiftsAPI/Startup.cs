@@ -55,6 +55,7 @@ namespace BestGiftsAPI
             });
 
             services.AddSingleton<IPaginationHelper,PaginationHelper>();
+            services.AddSingleton<IFilterSortingHelper,FilterSortingHelper>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
