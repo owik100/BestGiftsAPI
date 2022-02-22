@@ -1,4 +1,4 @@
-﻿namespace BestGiftsAPI.Other_Models
+﻿namespace BestGiftsAPI.FilterSortingmodels
 {
     public enum SortingModel
     {

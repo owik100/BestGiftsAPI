@@ -13,8 +13,9 @@ using System.IO;
 using AutoMapper;
 using BestGiftsAPI.Entities;
 using BestGiftsAPI.Helpers;
-using BestGiftsAPI.Other_Models;
+using BestGiftsAPI.FilterSortingmodels;
 using System.Linq.Expressions;
+using BestGiftsAPI.FilterSorting_models;
 
 namespace BestGiftsAPI.Controllers
 {
@@ -42,7 +43,7 @@ namespace BestGiftsAPI.Controllers
         // GET: api/GiftIdeas/GetAll
         [Route("GetAll")]
         [HttpGet]
-        public async Task<ActionResult<PagedListDTO<GiftIdeaDTO>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] SortingModel sort = 0)
+        public async Task<ActionResult<PagedListDTO<GiftIdeaDTO>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] SortingModel sort = 0, [FromQuery] FilterModel filter = null)
         {
             var output = new PagedListDTO<GiftIdeaDTO>();
             var entities = new List<GiftIdea>();

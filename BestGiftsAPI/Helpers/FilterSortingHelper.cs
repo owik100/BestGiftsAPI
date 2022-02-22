@@ -1,5 +1,5 @@
 ﻿using BestGiftsAPI.Entities;
-using BestGiftsAPI.Other_Models;
+using BestGiftsAPI.FilterSortingmodels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
