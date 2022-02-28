@@ -1,5 +1,7 @@
 ﻿using BestGiftsAPI.Entities;
+using BestGiftsAPI.FilterSorting_models;
 using BestGiftsAPI.FilterSortingmodels;
+using LinqKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +38,31 @@ namespace BestGiftsAPI.Helpers
                     break;
             }
             return result;
+        }
+
+        public Expression<Func<GiftIdea, bool>> PrepareFilter(FilterModel filterModel)
+        {
+            Expression<Func<GiftIdea, bool>> result = x => true;
+            if (!String.IsNullOrEmpty(filterModel.Author))
+            {
+                Expression<Func<GiftIdea, bool>> filterDelegatAuthor = x => x.Author == filterModel.Author;
+                result = result.And(filterDelegatAuthor);
+            }
+
+            if (!String.IsNullOrEmpty(filterModel.GiftName))
+            {
+                Expression<Func<GiftIdea, bool>> filterDelegatName = x => x.Name.Contains(filterModel.GiftName);
+                result = result.And(filterDelegatName);
+            }
+
+            if (filterModel.categoryID > -1)
+            {
+                Expression<Func<GiftIdea, bool>> filterDelegatCategory = x => x.GiftIdeaCategory.Any(y => y.CategoryId == filterModel.categoryID);
+                result = result.And(filterDelegatCategory);
+            }
+
+            return result;
+
         }
     }
 }
