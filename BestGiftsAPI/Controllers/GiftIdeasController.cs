@@ -60,7 +60,7 @@ namespace BestGiftsAPI.Controllers
                 int totalPages = _paginationHelper.CalculateTotalPages(count, pageSize);
 
                 bool descending = false;
-                IOrderedQueryable orderedQueryable = null;
+
                 Expression<Func<GiftIdea, int>> sortingDelegat = _filterSortingHelper.PrepareSorting(sort, ref descending);
                 Expression<Func<GiftIdea, bool>> filterDelegat = _filterSortingHelper.PrepareFilter(filter);
 
