@@ -9,7 +9,9 @@ With API you can:
  - Comment on ideas
  - Checking API Server status (Online/Offline)
 
-# Configuration
+## Prerequisites
+You will need [.NET 5](https://dotnet.microsoft.com/en-us/download/dotnet/5.0)
+## Configuration
 1. Add connection string in **appsettings.json** to DefaultConnection
 ```
   "ConnectionStrings": {
